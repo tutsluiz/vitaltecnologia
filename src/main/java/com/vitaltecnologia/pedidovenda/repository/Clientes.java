@@ -5,8 +5,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.vitaltecnologia.pedidovenda.model.Cliente;
+import com.vitaltecnologia.pedidovenda.repository.filter.ClienteFilter;
+import com.vitaltecnologia.pedidovenda.service.NegocioException;
+import com.vitaltecnologia.pedidovenda.util.jpa.Transactional;
 
 public class Clientes implements Serializable {
 
@@ -15,6 +26,52 @@ public class Clientes implements Serializable {
 	@Inject
 	private EntityManager manager;
 	
+
+	public Cliente guardar(Cliente cliente) {
+		return manager.merge(cliente);
+	}
+	
+	
+	@Transactional
+	public void remover(Cliente cliente) {
+		try {
+			cliente = porId(cliente.getId());
+			manager.remove(cliente);
+			manager.flush();
+		} catch (PersistenceException e) {
+			throw new NegocioException("Produto não pode ser excluído.");
+		}
+	}
+/*
+	public Cliente porSku(String cpf) {
+		try {
+			return manager.createQuery("from Produto where upper(doc_receita_federal) = :doc_receita_federal",
+					Cliente.class)
+				.setParameter("sku", cpf.toUpperCase())
+				.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+*/	
+	
+	@SuppressWarnings("unchecked")
+	public List<Cliente> filtrados(ClienteFilter filtro) {
+		Session session = manager.unwrap(Session.class);
+		Criteria criteria = session.createCriteria(Cliente.class);
+		/*
+		if (StringUtils.isNotBlank(filtro.getDocumentoReceitaFederal())) {
+			criteria.add(Restrictions.eq("documentoReceitaFederal", filtro.getDocumentoReceitaFederal()));
+		}
+		*/
+		if (StringUtils.isNotBlank(filtro.getNome())) {
+			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+		}
+		
+		return criteria.addOrder(Order.asc("nome")).list();
+	}
+	
+
 	public Cliente porId(Long id) {
 		return this.manager.find(Cliente.class, id);
 	}
@@ -25,5 +82,8 @@ public class Clientes implements Serializable {
 				.setParameter("nome", nome.toUpperCase() + "%")
 				.getResultList();
 	}
+	
+
+	
 	
 }

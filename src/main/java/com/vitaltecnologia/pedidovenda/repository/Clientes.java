@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,33 +40,36 @@ public class Clientes implements Serializable {
 			manager.remove(cliente);
 			manager.flush();
 		} catch (PersistenceException e) {
-			throw new NegocioException("Produto não pode ser excluído.");
+			throw new NegocioException("Cliente não pode ser excluído.");
 		}
 	}
-/*
-	public Cliente porSku(String cpf) {
+
+	public Cliente documentoReceitaFederal(String cpf) {
 		try {
-			return manager.createQuery("from Produto where upper(doc_receita_federal) = :doc_receita_federal",
+			return manager.createQuery("from Cliente where upper(doc_receita_federal) = :doc_receita_federal",
 					Cliente.class)
-				.setParameter("sku", cpf.toUpperCase())
+				.setParameter("documentoReceitaFederal", cpf.toUpperCase())
 				.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-*/	
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<Cliente> filtrados(ClienteFilter filtro) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(Cliente.class);
-		/*
+		
 		if (StringUtils.isNotBlank(filtro.getDocumentoReceitaFederal())) {
 			criteria.add(Restrictions.eq("documentoReceitaFederal", filtro.getDocumentoReceitaFederal()));
 		}
-		*/
+		
 		if (StringUtils.isNotBlank(filtro.getNome())) {
 			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+		}
+		if(StringUtils.isNotBlank(filtro.getEmail())){
+			criteria.add(Restrictions.ilike("email", filtro.getEmail()));
 		}
 		
 		return criteria.addOrder(Order.asc("nome")).list();

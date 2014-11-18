@@ -8,7 +8,16 @@ public class ClienteFilter implements Serializable {
 
 	private String documentoReceitaFederal;
 	private String nome;
+	private String email;
 
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getDocumentoReceitaFederal() {
 		return documentoReceitaFederal;

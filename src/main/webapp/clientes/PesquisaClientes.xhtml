@@ -28,20 +28,52 @@
 	    		
 	    		<p:outputLabel value="Nome" for="nome"/>
 	    		<p:inputText id="nome" size="60" value="#{pesquisaClientesBean.filtro.nome}" />
+	    		
+	    		<p:outputLabel value="Email" for="email"/>
+	    		<p:inputText id="email" size="60" value="#{pesquisaClientesBean.filtro.email}" />
+	    		
 	    	</p:panelGrid>
-	    	
-	    	<p:dataTable id="clientesTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
-	    		style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado." rows="20"
-	    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
-	    		<p:column headerText="CPF" style="text-align: center; width: 100px">
-	    			<h:outputText value="#{cliente.documentoReceitaFederal}" />
-	    		</p:column>
-	    		<p:column headerText="Nome">
-	    			<h:outputText value="#{cliente.nome}" />
-	    		</p:column>
 
-	    	</p:dataTable>
-	    	
-    	</h:form>
+			<p:dataTable id="clientesTable"
+				value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
+				style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+				<p:column headerText="CPF" style="text-align: center; width: 100px">
+					<h:outputText value="#{cliente.documentoReceitaFederal}" />
+				</p:column>
+				<p:column headerText="Nome">
+					<h:outputText value="#{cliente.nome}" />
+				</p:column>
+				<p:column headerText="Email">
+					<h:outputText value="#{cliente.email}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+					<p:button outcome="/clientes/CadastroCliente" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="cliente" value="#{cliente.id}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="confirmacaoExclusao.show()" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaClientesBean.clienteSelecionado}"
+							value="#{cliente}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog header="Exclusão de cliente"
+				message="Tem certeza que deseja excluir o cliente #{pesquisaClientesBean.clienteSelecionado.nome}?"
+				widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+				<p:button value="Não"
+					onclick="confirmacaoExclusao.hide(); return false;" />
+				<p:commandButton value="Sim"
+					oncomplete="confirmacaoExclusao.hide();"
+					action="#{pesquisaClientesBean.excluir}" process="@this"
+					update=":frmPesquisa:clientesTable" />
+			</p:confirmDialog>
+		</h:form>
     </ui:define>
 </ui:composition>

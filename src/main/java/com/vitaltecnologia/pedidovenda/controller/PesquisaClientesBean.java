@@ -34,12 +34,13 @@ public class PesquisaClientesBean implements Serializable {
 		clientes.remover(clienteSelecionado);
 		clientesFiltrados.remove(clienteSelecionado);
 		
-		FacesUtil.addInfoMessage("Documento " + clienteSelecionado.getDocumentoReceitaFederal()
+		FacesUtil.addInfoMessage("Documento " + clienteSelecionado.getNome()
 				+ " excluído com sucesso.");
 	}
 	
 	public void pesquisar() {
 		clientesFiltrados = clientes.filtrados(filtro);
+		
 	}
 	
 	public List<Cliente> getClientesFiltrados() {

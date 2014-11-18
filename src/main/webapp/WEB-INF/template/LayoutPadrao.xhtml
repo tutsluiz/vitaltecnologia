@@ -34,27 +34,31 @@
 				<span style="float: left; height: 30px; line-height: 30px; margin-right: 60px">
 				Olá #{seguranca.nomeUsuario}!
 				</span>
-				
-				<h:form style="display: inline-block">
-					<p:menubar styleClass="menu-sistema">
-						<p:submenu label="Cadastros">
-							<p:menuitem value="Clientes"  outcome="/clientes/PesquisaClientes" />
-							<p:menuitem value="Usuários" />
-							<p:separator/>
-							<p:menuitem value="Categorias" />
-							<p:menuitem value="Produtos" outcome="/produtos/PesquisaProdutos" />
-						</p:submenu>
-						<p:submenu label="Pedidos">
-							<p:menuitem value="Novo pedido" outcome="/pedidos/CadastroPedido" />
-							<p:menuitem value="Pesquisa" outcome="/pedidos/PesquisaPedidos" />
-						</p:submenu>
-						<p:submenu label="Relatórios">
-							<p:menuitem value="Pedidos emitidos" outcome="/relatorios/RelatorioPedidosEmitidos" />
-						</p:submenu>
-						<p:menuitem value="Sair" url="/j_spring_security_logout" />
-					</p:menubar>
-				</h:form>
-			</div>
+
+		<h:form style="display: inline-block">
+			<p:menubar styleClass="menu-sistema">
+				<p:submenu label="Cadastros">
+					<p:menuitem value="Usuários" />
+					<p:separator />
+					<p:menuitem value="Categorias" />
+					<p:menuitem value="Produtos" outcome="/produtos/PesquisaProdutos" />
+				</p:submenu>
+				<p:submenu label="Clientes">
+					<p:menuitem value="Novo cliente" outcome="/pedidos/CadastroCliente" />
+					<p:menuitem value="Pesquisa" outcome="/clientes/PesquisaClientes" />
+				</p:submenu>
+				<p:submenu label="Pedidos">
+					<p:menuitem value="Novo pedido" outcome="/pedidos/CadastroPedido" />
+					<p:menuitem value="Pesquisa" outcome="/pedidos/PesquisaPedidos" />
+				</p:submenu>
+				<p:submenu label="Relatórios">
+					<p:menuitem value="Pedidos emitidos"
+						outcome="/relatorios/RelatorioPedidosEmitidos" />
+				</p:submenu>
+				<p:menuitem value="Sair" url="/j_spring_security_logout" />
+			</p:menubar>
+		</h:form>
+	</div>
 			<div style="clear: both"></div>
 		</header>
 
